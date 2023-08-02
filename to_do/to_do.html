@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="to_do.css" />
+  </head>
+  <body>
+    <div id="myDIV" class="header">
+      <h2 style="margin: 5px">My To Do List</h2>
+      <input type="text" id="myInput" placeholder="Title..." />
+      <span onclick="newElement()" class="addBtn">Add</span>
+    </div>
+    <div style="display: flex">
+      <div id="task_section">
+        <div class="task-header">TO DO</div>
+        <ul id="myUL"></ul>
+      </div>
+      <div style="border-left: 1px solid #000"></div>
+      <div id="task_section">
+        <div class="task-header">Done</div>
+        <ul id="done-list"></ul>
+      </div>
+    </div>
+
+    <script src="to_do.js"></script>
+  </body>
+</html>
