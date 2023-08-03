@@ -51,34 +51,6 @@ function newElement() {
 
   document.getElementById("myInput").value = "";
 
-  var e = document.createElement("SPAN");
-  e.className = "priority";
-  e.innerHTML = '<i class="fa fa-star-o"></i>';
-  li.appendChild(e);
-
-  for (i = 0; i < priority.length; i++) {
-    priority[i].onclick = function () {
-      var ul = this.parentElement.parentElement;
-
-      const items = ul.childNodes;
-      console.log(ul, items);
-      moveItem(i, 0, ul, items);
-    };
-  }
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function () {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-
   var span = document.createElement("SPAN");
   span.innerHTML = "Mark as Done";
   span.className = "done";
@@ -93,6 +65,33 @@ function newElement() {
         .replace("Mark as Done", "");
       console.log(s);
       addToDone(s);
+      var div = this.parentElement;
+      div.style.display = "none";
+    };
+  }
+
+  var e = document.createElement("SPAN");
+  e.className = "priority";
+  e.innerHTML = '<i class="fa fa-arrow-up"></i>';
+  li.appendChild(e);
+
+  for (i = 0; i < priority.length; i++) {
+    priority[i].onclick = function () {
+      var ul = this.parentElement.parentElement;
+      const items = ul.childNodes;
+      console.log(ul, items);
+      moveItem(i, 0, ul, items);
+    };
+  }
+
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(txt);
+  li.appendChild(span);
+
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function () {
       var div = this.parentElement;
       div.style.display = "none";
     };
@@ -126,9 +125,76 @@ const moveItem = (from, to, ul, items) => {
   if (to > items.length - 1 || to < 0) return;
 
   const item = items[from - 1];
-  console.log(item);
   if (!item) return;
 
   ul.removeChild(item);
   ul.insertBefore(item, ul.children[to]);
 };
+
+var ul = document.getElementById("myUL");
+var liSelected;
+var index = -1;
+document.addEventListener(
+  "keydown",
+  function (event) {
+    var len = ul.getElementsByTagName("li").length - 1;
+    if (event.key === "ArrowDown") {
+      index++;
+      //down
+      if (liSelected) {
+        removeClass(liSelected, "selected");
+        next = ul.getElementsByTagName("li")[index];
+        if (typeof next !== undefined && index <= len) {
+          liSelected = next;
+        } else {
+          index = 0;
+          liSelected = ul.getElementsByTagName("li")[0];
+        }
+        addClass(liSelected, "selected");
+      } else {
+        index = 0;
+
+        liSelected = ul.getElementsByTagName("li")[0];
+        addClass(liSelected, "selected");
+      }
+    } else if (event.key === "ArrowUp") {
+      //up
+      if (liSelected) {
+        removeClass(liSelected, "selected");
+        index--;
+        next = ul.getElementsByTagName("li")[index];
+        if (typeof next !== undefined && index >= 0) {
+          liSelected = next;
+        } else {
+          index = len;
+          liSelected = ul.getElementsByTagName("li")[len];
+        }
+        addClass(liSelected, "selected");
+      } else {
+        index = 0;
+        liSelected = ul.getElementsByTagName("li")[len];
+        addClass(liSelected, "selected");
+      }
+    }
+  },
+  false
+);
+
+function removeClass(el, className) {
+  if (el.classList) {
+    el.classList.remove(className);
+  } else {
+    el.className = el.className.replace(
+      new RegExp("(^|\\b)" + className.split(" ").join("|") + "(\\b|$)", "gi"),
+      " "
+    );
+  }
+}
+
+function addClass(el, className) {
+  if (el.classList) {
+    el.classList.add(className);
+  } else {
+    el.className += " " + className;
+  }
+}
